@@ -57,14 +57,36 @@ export const login = async (req, res) => {
       if (!passwordMatch) {
         return res.status(401).json({ message: "Incorrect password" });
       }
-      const token = jwt.sign({ id: user }, process.env.JWT_SECRET);
+
+      //creating accesstoken
+      const accessToken = jwt.sign(
+        { id: user?.id },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+          expiresIn: "10m",
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          id: user?.id,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+          expiresIn: "1d",
+        }
+      );
       const { password, ...others } = user;
+
+      //assigning refresh token in httpOnly Cookie
       res
-        .cookie("accessToken", token, {
+        .cookie("refreshToken", refreshToken, {
           httpOnly: true,
+          secure: true,
+          sameSite: "none",
         })
         .status(200)
-        .json({ message: "Logged in successfully", user: others });
+        .json({ message: "Logged in successfully", user: others, accessToken });
     } else {
       return res.status(404).json({ message: "Username doesn't exist" });
     }
@@ -74,9 +96,47 @@ export const login = async (req, res) => {
   }
 };
 
+export const refresh = async (req, res) => {
+  if (req.cookies?.refreshToken) {
+    //destructuring the jwt cookie
+    const refreshToken = req?.cookies?.refreshToken;
+
+    //verifying refresh token
+
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      async (err, decoded) => {
+        if (err) {
+          //wrong refresh token
+          return res.status(401).json({ message: "Unauthorized" });
+        } else {
+          //correct token we send a new access token
+          const accessToken = jwt.sign(
+            { id: decoded.id },
+            process.env.ACCESS_TOKEN_SECRET,
+            {
+              expiresIn: "10m",
+            }
+          );
+          const q = await db.query("SELECT * FROM users WHERE id=$1", [
+            decoded.id,
+          ]);
+
+          const user = q.rows[0];
+          const { password, ...others } = user;
+          return res.status(200).json({ accessToken, user: others });
+        }
+      }
+    );
+  } else {
+    return res.status(406).json({ message: "Unauthorized" });
+  }
+};
+
 export const logOut = async (req, res) => {
   res
-    .clearCookie("accessToken", {
+    .clearCookie("refreshToken", {
       secure: true,
       sameSite: "none",
     })

@@ -49,3 +49,7 @@ CREATE TABLE likes (
     userId INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     postId INT NOT NULL REFERENCES posts(id) ON DELETE CASCADE
 );
+
+
+//one example of inserting a postId
+INSERT INTO posts(id, descp, img, userId, createdAt) VALUES(1, 'first post here', 'https://img.freepik.com/free-photo/purple-osteospermum-daisy-flower_1373-16.jpg?w=2000', 1, '2019-11-28T17:58:12.776Z');
