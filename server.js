@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import commentRoutes from "./routes/comments.js";
 import likesRoutes from "./routes/likes.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -18,9 +19,9 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //gives us req.body and converts it to standard javascript object
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
-
+app.use(cookieParser());
 //routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
