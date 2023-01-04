@@ -1,0 +1,17 @@
+CREATE TABLE users (
+    id SERIAL NOT NULL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    coverPic VARCHAR(255),
+    profilePic VARCHAR(255),
+    city VARCHAR(255),
+    website VARCHAR(255)
+)
+
+CREATE TABLE posts (
+    id SERIAL NOT NULL PRIMARY KEY,
+    desc VARCHAR(255) NOT NULL,
+    img VARCHAR(255)
+)
