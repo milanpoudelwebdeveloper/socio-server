@@ -2,8 +2,12 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import morgan from "morgan";
-import fs from "fs";
 import dotenv from "dotenv";
+import userRoutes from "./routes/users.js";
+import authRoutes from "./routes/auth.js";
+import postRoutes from "./routes/posts.js";
+import commentRoutes from "./routes/comments.js";
+import likesRoutes from "./routes/likes.js";
 
 dotenv.config();
 
@@ -17,9 +21,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-fs.readdirSync("./routes").map((r) =>
-  app.use("/api", require(`./routes/${r}`))
-);
+//routes
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/likes", likesRoutes);
 
 const port = process.env.PORT || 8000;
 
