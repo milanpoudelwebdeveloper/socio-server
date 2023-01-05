@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import commentRoutes from "./routes/comments.js";
 import likesRoutes from "./routes/likes.js";
+import uplodRoutes from "./routes/cloudinary.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/likes", likesRoutes);
+app.use("/api/uploads", uplodRoutes);
 
 const port = process.env.PORT || 8000;
 
