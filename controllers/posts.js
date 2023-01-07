@@ -7,9 +7,10 @@ export const getPosts = async (req, res) => {
   try {
     const q = await db.query(
       //get everything from post but from users get id, name, profilePic
-      "SELECT p.*, u.id AS userId, name, profilePic FROM posts AS p JOIN users AS u ON(u.id= p.userId) JOIN relationships AS r ON (p.userId = r.followedUserId AND r.followerUserId=$1 OR p.userId=$1) ORDER BY p.createdAt DESC",
+      "SELECT p.*, (SELECT COUNT(*) FROM comments as c WHERE c.postId=p.id) AS commentsCount, (SELECT COUNT(*) FROM likes AS l WHERE l.postId = p.id) as likesCount, EXISTS (SELECT * FROM likes WHERE postId = p.id AND userId = $1) AS liked, u.id AS userId, name, profilePic FROM posts AS p JOIN users AS u ON(u.id= p.userId) JOIN relationships AS r ON (p.userId = r.followedUserId AND r.followerUserId=$1 OR p.userId=$1)  GROUP BY p.id, u.id ORDER BY p.createdAt DESC",
       [req.id]
     );
+
     return res.status(200).json({
       posts: q.rows,
     });

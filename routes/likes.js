@@ -1,8 +1,11 @@
 import express from "express";
-import { getUsers } from "../controllers/users.js";
+import { deleteLike, getLikes, postLike } from "../controllers/likes.js";
+import { checkTokenValidity } from "../middlwares/checkTokenValidity.js";
 
 const router = express.Router();
 
-router.get("/find/:userId", getUsers);
+router.get("/", checkTokenValidity, getLikes);
+router.post("/", checkTokenValidity, postLike);
+router.delete("/", checkTokenValidity, deleteLike);
 
 export default router;
