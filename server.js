@@ -38,6 +38,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/likes", likesRoutes);
 app.use("/api/uploads", uplodRoutes);
+app.use("/api/comments", commentRoutes);
 
 const port = process.env.PORT || 8000;
 

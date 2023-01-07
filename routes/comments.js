@@ -1,8 +1,9 @@
 import express from "express";
-import { getUsers } from "../controllers/users.js";
-
+import { getComments, postComment } from "../controllers/comment.js";
+import { checkTokenValidity } from "../middlwares/checkTokenValidity.js";
 const router = express.Router();
 
-router.get("/find/:userId", getUsers);
+router.get("/", checkTokenValidity, getComments);
+router.post("/", checkTokenValidity, postComment);
 
 export default router;

@@ -25,7 +25,7 @@ ALTER TABLE posts ADD COLUMN publicId VARCHAR(255);
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY NOT NULL,
     descp VARCHAR(255) NOT NULL,
-    createdAt TIMESTAMP NOT NULL DEFAULT NOW() 
+    createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
     userId INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     postId INT NOT NULL REFERENCES posts(id) ON DELETE CASCADE
 );
@@ -54,3 +54,5 @@ CREATE TABLE likes (
 
 //one example of inserting a postId
 INSERT INTO posts(id, descp, img, userId, createdAt) VALUES(1, 'first post here', 'https://img.freepik.com/free-photo/purple-osteospermum-daisy-flower_1373-16.jpg?w=2000', 1, '2019-11-28T17:58:12.776Z');
+
+INSERT INTO comments(id, descp, createdAt, userId, postId) VALUES(1, "first comment", '2019-11-28T17:58:12.776Z', 1, 1);
