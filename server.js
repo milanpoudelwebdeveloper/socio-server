@@ -24,7 +24,11 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //gives us req.body and converts it to standard javascript object
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "10mb",
+  })
+);
 app.use(
   cors({
     origin: [
